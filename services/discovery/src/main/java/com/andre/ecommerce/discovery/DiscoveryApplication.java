@@ -1,4 +1,4 @@
-package com.andre.discovery;
+package com.andre.ecommerce.discovery;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
