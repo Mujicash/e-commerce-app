@@ -22,6 +22,10 @@ public abstract class ValueObject <T extends Serializable> {
         return this.value.toString();
     }
 
+    public T getValue() {
+        return this.value;
+    }
+
     private void ensureValueIsDefined(T value) {
         if (value == null) {
             throw new InvalidValueException("Value must be defined.");
