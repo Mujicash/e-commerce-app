@@ -3,21 +3,30 @@ package com.andre.ecommerce.customer.domain;
 import com.andre.ecommerce.shared.domain.DateValueObject;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class CustomerBirthdate extends DateValueObject {
-    public CustomerBirthdate(Date value) {
+
+    public CustomerBirthdate(String value) {
         super(value);
-        this.ensureIsValidBirthdate(value);
+        ensureIsValidBirthdate(this.getValue());
     }
 
-    private void ensureIsValidBirthdate(Date value) {
-        LocalDate currentDate = LocalDate.now();
-        int ageInYears = currentDate.getYear() - value.getYear();
+    public CustomerBirthdate(LocalDate value) {
+        super(value);
+        ensureIsValidBirthdate(value);
+    }
 
-        if (currentDate.getMonthValue() < value.getMonth() ||
-                (currentDate.getMonthValue() == value.getMonthValue() && currentDate.getDayOfMonth() < value.getDayOfMonth())) {
-            ageInYears--;
+    private void ensureIsValidBirthdate(LocalDate birthdate) {
+        LocalDate today = LocalDate.now();
+        int age = today.getYear() - birthdate.getYear();
+
+        if (today.getMonthValue() < birthdate.getMonthValue() ||
+                (today.getMonthValue() == birthdate.getMonthValue() && today.getDayOfMonth() < birthdate.getDayOfMonth())) {
+            age--; // Ajustar la edad si el cumpleaños aún no ha ocurrido este año
+        }
+
+        if (age < 18 || age > 90) {
+            throw new IllegalArgumentException(String.format("Invalid birthdate: %d", age));
         }
     }
 }
