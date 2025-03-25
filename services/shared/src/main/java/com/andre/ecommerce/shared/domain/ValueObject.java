@@ -11,10 +11,17 @@ public abstract class ValueObject <T extends Serializable> {
         this.value = value;
     }
 
-    public boolean equals(ValueObject<T> other) {
-        return other != null &&
-                this.getClass().equals(other.getClass()) &&
-                Objects.equals(this.value, other.value);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ValueObject<?> that = (ValueObject<?>) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
     }
 
     @Override
