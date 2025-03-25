@@ -21,18 +21,18 @@ public class CustomerAddressTest {
                 "Cerca al parque"
         );
 
-        assertEquals("Lima", address.getDepartment().getValue());
-        assertEquals("Lima", address.getProvince().getValue());
-        assertEquals("San Miguel", address.getDistrict().getValue());
-        assertEquals("15253", address.getPostalCode().getValue());
-        assertEquals("Avenida", address.getStreetType().getValue());
-        assertEquals("La Libertad", address.getStreetName().getValue());
-        assertTrue(address.getStreetNumber().isPresent());
-        assertEquals(250, address.getStreetNumber().get().getValue());
-        assertTrue(address.getFloorApartment().isPresent());
-        assertEquals("105", address.getFloorApartment().get().getValue());
-        assertTrue(address.getReference().isPresent());
-        assertEquals("Cerca al parque", address.getReference().get());
+        assertEquals("Lima", address.getDepartment());
+        assertEquals("Lima", address.getProvince());
+        assertEquals("San Miguel", address.getDistrict());
+        assertEquals("15253", address.getPostalCode());
+        assertEquals("Avenida", address.getStreetType());
+        assertEquals("La Libertad", address.getStreetName());
+        //assertTrue(address.getStreetNumber().isPresent());
+        assertEquals(250, address.getStreetNumber());
+        //assertTrue(address.getFloorApartment().isPresent());
+        assertEquals("105", address.getFloorApartment());
+        //assertTrue(address.getReference().isPresent());
+        assertEquals("Cerca al parque", address.getReference());
     }
 
     @Test
@@ -65,5 +65,24 @@ public class CustomerAddressTest {
         // Se espera que sean iguales ya que todos sus VO son iguales.
         assertEquals(address1, address2);
         assertEquals(address1.hashCode(), address2.hashCode());
+    }
+
+    @Test
+    public void testOptionalValuesNotPresent() {
+        CustomerAddress address = new CustomerAddress(
+                "Lima",       // department
+                "Lima",       // province
+                "San Miguel", // district
+                "15253",      // postalCode
+                "Avenida",    // streetType
+                "La Libertad",// streetName
+                null,         // streetNumber
+                null,         // floorApartment
+                null          // reference
+        );
+
+        assertNull(address.getStreetNumber(), "Expected streetNumber to be null when not provided");
+        assertNull(address.getFloorApartment(), "Expected floorApartment to be null when not provided");
+        assertNull(address.getReference(), "Expected reference to be null when not provided");
     }
 }

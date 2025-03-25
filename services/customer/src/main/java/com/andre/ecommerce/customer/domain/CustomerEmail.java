@@ -6,7 +6,7 @@ import com.andre.ecommerce.shared.domain.StringValueObject;
 import java.util.regex.Pattern;
 
 public class CustomerEmail extends StringValueObject {
-    private static final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Za-z0-9](?:[A-Za-z0-9]*\\.?[A-Za-z0-9]+){5,29}@(?:gmail\\.com|hotmail\\.com)$\n");
+    private static final Pattern VALID_EMAIL_REGEX = Pattern.compile("^[A-Za-z0-9](?:[A-Za-z0-9]*\\.?[A-Za-z0-9]+){5,29}@(?:gmail\\.com|hotmail\\.com)$");
 
     public CustomerEmail(String value) {
         super(value);
