@@ -5,13 +5,14 @@ import com.andre.ecommerce.shared.domain.UuidValueObject;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CustomerTest {
 
     @Test
-    public void testValidCustomerCreation() {
+    public void testValidCustomerCreationWithAddress() {
         // Se construye un CustomerAddress previamente (su construcción ya realiza las validaciones correspondientes)
         CustomerAddress address = new CustomerAddress(
                 "Lima",
@@ -32,7 +33,9 @@ public class CustomerTest {
                 userId,
                 LocalDate.of(2001,1,27),
                 "andre27012001@gmail.com",
-                address
+                "Andre",
+                "Mujica",
+                List.of(address)
         );
 
         // Verificar que los VO internos se hayan creado correctamente a partir de las primitivas
@@ -40,13 +43,34 @@ public class CustomerTest {
         assertNotNull(customer.getId());
         assertNotNull(customer.getBirthdate());
         assertNotNull(customer.getEmail());
-        assertNotNull(customer.getAddress());
+        assertNotNull(customer.getAddresses());
 
         assertEquals(userId, customer.getId());
         assertEquals(LocalDate.of(2001, 1, 27), customer.getBirthdate());
         assertEquals("andre27012001@gmail.com", customer.getEmail());
         // Para la dirección, se compara usando equals, que a su vez debe delegar en los VO internos
-        assertEquals(address, customer.getAddress());
+        assertEquals(1, customer.getAddresses().size());
+        assertEquals(address, customer.getAddresses().getFirst());
+    }
+
+    @Test
+    public void testCreateCustomerWithoutAddress() {
+        String userId = UuidValueObject.create().getValue();
+        // Crear Customer sin dirección (lista vacía)
+        Customer customer = new Customer(
+                userId,
+                LocalDate.of(2001,1,27),
+                "andre27012001@gmail.com",
+                "Andre",
+                "Mujica"
+        );
+
+        assertEquals(userId, customer.getId());
+        assertEquals(LocalDate.of(2001, 1, 27), customer.getBirthdate());
+        assertEquals("andre27012001@gmail.com", customer.getEmail());
+        // Verificar que la lista de direcciones está vacía
+        assertNotNull(customer.getAddresses());
+        assertTrue(customer.getAddresses().isEmpty());
     }
 
     @Test
@@ -69,9 +93,11 @@ public class CustomerTest {
         Exception exception = assertThrows(InvalidValueException.class, () -> {
             new Customer(
                     userId,
-                    LocalDate.of(1990, 1, 1),
-                    "andre2701@yahoo.com", // email inválido
-                    address
+                    LocalDate.of(2001,1,27),
+                    "andre27012001@yahoo.com",
+                    "Andre",
+                    "Mujica",
+                    List.of(address)
             );
         });
         // Se puede validar que el mensaje contenga una pista, si el mensaje es significativo
@@ -110,13 +136,17 @@ public class CustomerTest {
                 userId,
                 LocalDate.of(1990, 1, 1),
                 "andre271@gmail.com",
-                address1
+                "Andre",
+                "Mujica",
+                List.of(address1)
         );
         Customer customer2 = new Customer(
                 userId,
                 LocalDate.of(1990, 1, 1),
                 "andre271@gmail.com",
-                address2
+                "Andre",
+                "Mujica",
+                List.of(address2)
         );
 
         // Si se ha sobrescrito equals y hashCode (ya sea manualmente o con Lombok) en Customer y en sus VO,

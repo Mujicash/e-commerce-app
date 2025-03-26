@@ -3,7 +3,6 @@ package com.andre.ecommerce.customer.domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class Customer {
         }
     }
 
-    public List<CustomerAddress> getAddress() {
+    public List<CustomerAddress> getAddresses() {
         return Collections.unmodifiableList(address);
     }
 
