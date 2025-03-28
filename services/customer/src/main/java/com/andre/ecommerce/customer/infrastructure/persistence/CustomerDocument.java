@@ -1,6 +1,7 @@
 package com.andre.ecommerce.customer.infrastructure.persistence;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -11,12 +12,13 @@ import java.util.List;
 
 @Document(collation = "customers")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class CustomerDocument {
     @Id
     private String id;
     private String email;
     private LocalDate birthDate;
-    private List<CustomerAddressDocument> address;
+    private String firstName;
+    private String lastName;
+    private List<CustomerAddressDocument> addresses;
 }
