@@ -26,16 +26,13 @@ public class CustomerTest {
                 "Condominio de la Esquina"
         );
 
-        String userId = UuidValueObject.create().getValue();
-
         // Se crea el Customer con datos válidos
-        Customer customer = new Customer(
-                userId,
+        Customer customer = Customer.create(
                 LocalDate.of(2001,1,27),
                 "andre27012001@gmail.com",
                 "Andre",
                 "Mujica",
-                List.of(address)
+                address
         );
 
         // Verificar que los VO internos se hayan creado correctamente a partir de las primitivas
@@ -45,7 +42,7 @@ public class CustomerTest {
         assertNotNull(customer.getEmail());
         assertNotNull(customer.getAddresses());
 
-        assertEquals(userId, customer.getId());
+        //assertEquals(userId, customer.getId());
         assertEquals(LocalDate.of(2001, 1, 27), customer.getBirthdate());
         assertEquals("andre27012001@gmail.com", customer.getEmail());
         // Para la dirección, se compara usando equals, que a su vez debe delegar en los VO internos
@@ -55,17 +52,17 @@ public class CustomerTest {
 
     @Test
     public void testCreateCustomerWithoutAddress() {
-        String userId = UuidValueObject.create().getValue();
         // Crear Customer sin dirección (lista vacía)
-        Customer customer = new Customer(
-                userId,
+        Customer customer = Customer.create(
                 LocalDate.of(2001,1,27),
                 "andre27012001@gmail.com",
                 "Andre",
-                "Mujica"
+                "Mujica",
+                null
         );
 
-        assertEquals(userId, customer.getId());
+        //assertEquals(userId, customer.getId());
+        assertNotNull(customer.getId());
         assertEquals(LocalDate.of(2001, 1, 27), customer.getBirthdate());
         assertEquals("andre27012001@gmail.com", customer.getEmail());
         // Verificar que la lista de direcciones está vacía
@@ -87,17 +84,14 @@ public class CustomerTest {
                 "Cerca al parque"
         );
 
-        String userId = UuidValueObject.create().getValue();
-
         // Se espera que al pasar un email inválido se lance una excepción
         Exception exception = assertThrows(InvalidValueException.class, () -> {
-            new Customer(
-                    userId,
+            Customer.create(
                     LocalDate.of(2001,1,27),
                     "andre27012001@yahoo.com",
                     "Andre",
                     "Mujica",
-                    List.of(address)
+                    address
             );
         });
         // Se puede validar que el mensaje contenga una pista, si el mensaje es significativo
@@ -119,34 +113,21 @@ public class CustomerTest {
                 "105",
                 "Cerca al parque"
         );
-        CustomerAddress address2 = new CustomerAddress(
-                "Lima",
-                "Lima",
-                "San Miguel",
-                "15253",
-                "Avenida",
-                "La Libertad",
-                250,
-                "105",
-                "Cerca al parque"
-        );
-        String userId = UuidValueObject.create().getValue();
 
-        Customer customer1 = new Customer(
-                userId,
+        Customer customer1 = Customer.create(
                 LocalDate.of(1990, 1, 1),
                 "andre271@gmail.com",
                 "Andre",
                 "Mujica",
-                List.of(address1)
+                address1
         );
-        Customer customer2 = new Customer(
-                userId,
-                LocalDate.of(1990, 1, 1),
-                "andre271@gmail.com",
-                "Andre",
-                "Mujica",
-                List.of(address2)
+        Customer customer2 = Customer.restore(
+                customer1.getId(),
+                customer1.getBirthdate(),
+                customer1.getEmail(),
+                customer1.getFirstName(),
+                customer1.getLastName(),
+                customer1.getAddresses()
         );
 
         // Si se ha sobrescrito equals y hashCode (ya sea manualmente o con Lombok) en Customer y en sus VO,
