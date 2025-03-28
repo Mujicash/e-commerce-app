@@ -1,5 +1,6 @@
 package com.andre.ecommerce.customer.domain;
 
+import com.andre.ecommerce.shared.domain.UuidValueObject;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,30 +21,56 @@ public class Customer {
     @Getter @Setter
     private String lastName;
 
-    public Customer(
-            String id,
-            LocalDate birthdate,
-            String email,
-            String firstName,
-            String lastName
-    ) {
-        this(id, birthdate, email, firstName, lastName, new ArrayList<>());
-    }
-
-    public Customer(
+    private Customer(
             String id,
             LocalDate birthdate,
             String email,
             String firstName,
             String lastName,
-            List<CustomerAddress> address
+            List<CustomerAddress> addresses
     ) {
         this.id = new CustomerId(id);
         this.birthdate = new CustomerBirthdate(birthdate);
         this.email = new CustomerEmail(email);
         this.firstName = firstName;
         this.lastName = lastName;
-        this.address = new ArrayList<>(address);
+        this.address = new ArrayList<>(addresses);
+    }
+
+    public static Customer create(
+            LocalDate birthdate,
+            String email,
+            String firstName,
+            String lastName,
+            CustomerAddress address
+    ) {
+        String id = UuidValueObject.create().getValue();
+        return new Customer(
+                id,
+                birthdate,
+                email,
+                firstName,
+                lastName,
+                address != null ? List.of(address) : List.of()
+        );
+    }
+
+    public static Customer restore(
+            String id,
+            LocalDate birthdate,
+            String email,
+            String firstName,
+            String lastName,
+            List<CustomerAddress> addresses
+    ) {
+        return new Customer(
+                id,
+                birthdate,
+                email,
+                firstName,
+                lastName,
+                addresses
+        );
     }
 
     public String getId() {
