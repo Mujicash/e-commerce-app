@@ -4,6 +4,7 @@ import com.andre.ecommerce.customer.domain.Customer;
 import com.andre.ecommerce.customer.domain.CustomerAddress;
 import com.andre.ecommerce.customer.infrastructure.dto.CustomerAddressDTO;
 import com.andre.ecommerce.customer.infrastructure.dto.CustomerCreateDTO;
+import com.andre.ecommerce.customer.infrastructure.mapper.CustomerAddressMapper;
 import com.andre.ecommerce.customer.infrastructure.mapper.CustomerMapper;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CustomerMapperTest {
+
+    private final CustomerMapper customerMapper = new CustomerMapper(new CustomerAddressMapper());
 
     @Test
     public void testToDomainWithAddress() {
@@ -38,7 +41,7 @@ public class CustomerMapperTest {
                 lastName,
                 addressDTO
         );
-        Customer customer = CustomerMapper.toDomain(customerCreateDTO);
+        Customer customer = customerMapper.toDomain(customerCreateDTO);
 
         assertNotNull(customer);
         assertNotNull(customer.getId());
@@ -76,7 +79,7 @@ public class CustomerMapperTest {
                 lastName,
                 null
         );
-        Customer customer = CustomerMapper.toDomain(customerCreateDTO);
+        Customer customer = customerMapper.toDomain(customerCreateDTO);
 
         assertNotNull(customer);
         assertNotNull(customer.getId());
@@ -91,7 +94,8 @@ public class CustomerMapperTest {
 
     @Test
     public void testToDomainWithNullDTO() {
-        Customer customer = CustomerMapper.toDomain(null);
+        CustomerCreateDTO dto = null;
+        Customer customer = customerMapper.toDomain(dto);
 
         assertNull(customer);
     }

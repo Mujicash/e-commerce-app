@@ -9,6 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CustomerAddressMapperTest {
+
+    private final CustomerAddressMapper customerAddressMapper = new CustomerAddressMapper();
+
     @Test
     public void testToDomain() {
         CustomerAddressDTO addressDTO = new CustomerAddressDTO(
@@ -23,7 +26,7 @@ public class CustomerAddressMapperTest {
                 "Condominio de la Esquina"
         );
 
-        CustomerAddress customerAddress = CustomerAddressMapper.toDomain(addressDTO);
+        CustomerAddress customerAddress = customerAddressMapper.toDomain(addressDTO);
 
         assertNotNull(customerAddress);
         assertEquals(addressDTO.department(), customerAddress.getDepartment());
