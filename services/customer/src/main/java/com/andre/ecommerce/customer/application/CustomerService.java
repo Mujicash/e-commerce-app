@@ -21,9 +21,13 @@ public class CustomerService {
     }
 
     public String createCustomer(CustomerCreateDTO customerCreateDTO) {
-        Customer customer = customerMapper.toDomain(customerCreateDTO);
+        // mapper create dto -> domain
+        Customer customer = this.customerMapper.toDomain(customerCreateDTO);
         // some business logic
-        //customer = customerRepository.save(customer);
+        customer = this.customerRepository.save(customer);
+        // send email to new customer
+
+        return customer.getId();
     }
 
 }
